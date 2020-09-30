@@ -3,12 +3,18 @@
 var trailLength = 10;
 var timeOut = 20;
 var trailSize = 15;
-var trailTypes = ["Default","Emoji","RandomEmoji","WTF?"];
+var tailSize = 30;
+var trailTypes = ["Default","Emoji","RandomEmoji","WTF?","Custom"];
 var trailType = trailTypes[0];
 var emoji = "😂";
+var imageUrl = "5.png"; 
+var urlClick = "df.mp3";
+var urlClickCustom =  "xd.mp3";
 
 //####################################################################################################################################//
-
+trail = $("#trailPointer");
+trail.css( "height",trailSize+"px");
+trail.css( "width",trailSize+"px");
 
 class Point {
     constructor(x, y) {
@@ -42,10 +48,11 @@ $(document).mousemove(function (e) {
 
 
 function update(){
+    trail = $("#trailPointer");
     tail = $(".trail")
     for (let j = 0; j < points.length; j++) {
         var elem = document.createElement('div');
-        var size = trailSize + "px";
+        var size = tailSize + "px";
         elem.style.position = "fixed";
         elem.style.top = points[j].y + "px";
         elem.style.left = points[j].x + "px";
@@ -53,7 +60,7 @@ function update(){
         elem.style.height = size;
         elem.style.userSelect = "none";  
         elem.style.pointerEvents = "none";
-
+        elem.style.borderRadius = size;
         switch (trailType) {
             case "Default":
                 elem.style.background = "rgba(0, 0, 0, "+(Math.random() * (0.120 - 0.0200) + 0.0200).toFixed(4)+")";
@@ -62,17 +69,19 @@ function update(){
                 elem.append(emoji);
                 break;
             case "RandomEmoji":
-                var re = ["❤","🧡","💛","💚","💙","💜","🤎","🖤","🤍"];
+                var re = ["🤚🏾", "🖐🏾", "✋🏾", "🖖🏾", "👌🏾", "🤏🏾", "✌🏾", "🤞🏾", "🤟🏾"];
                 elem.append(re[Math.floor(Math.random()*re.length)]);
                 break;
             case "WTF?":
                 elem.append("🏳️‍🌈");
                 break;
-            default:
-                elem.style.background = "rgba(0, 0, 0, "+(Math.random() * (0.120 - 0.0200) + 0.0200).toFixed(4)+")";
+            case "Custom":
+                elem.style.background = 'url("' + imageUrl + '")';
+                elem.style.backgroundSize = "100%";
+                urlClick = urlClickCustom;
           }
         
-        elem.style.borderRadius = size;
+        
         if(tail.children().length<trailLength){
             tail.append(elem);
         }
@@ -113,4 +122,7 @@ btn.mousedown(function() {
 btn.mouseup(function() {
     var trail = $("#trailPointer");
     trail.css("border","1px solid rgba(0, 0, 0, 0.616)");
+});
+btn.click(function(){
+    new Audio(urlClick).play();
 });
